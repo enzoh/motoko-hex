@@ -20,7 +20,7 @@ actor {
   };
 
   private func unwrap(result : Result<[Word8], Hex.DecodeError>) : [Word8] {
-    Result.assertUnwrap<[Word8], Hex.DecodeError>(result);
+    Result.unwrapOk<[Word8], Hex.DecodeError>(result);
   };
 
   public func run() {
@@ -30,6 +30,6 @@ actor {
     ];
     let expect = #ok data;
     let actual = Hex.decode(Hex.encode(data));
-    assert(Array.equals<Word8>(unwrap(expect), unwrap(actual), eq));
+    assert(Array.equal<Word8>(unwrap(expect), unwrap(actual), eq));
   };
 };

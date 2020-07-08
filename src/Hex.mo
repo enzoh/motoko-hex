@@ -35,9 +35,9 @@ module {
    * Encode an array of unsigned 8-bit integers in hexadecimal format.
    */
   public func encode(array : [Word8]) : Text {
-    Array.foldl<Word8, Text>(func (accum, w8) {
+    Array.foldLeft<Word8, Text>(array, "", func (accum, w8) {
       accum # encodeW8(w8);
-    }, "", array);
+    });
   };
 
   /**
@@ -55,11 +55,11 @@ module {
   public func decode(text : Text) : Result<[Word8], DecodeError> {
     let next = text.chars().next;
     func parse() : Result<Word8, DecodeError> {
-      Option.unwrapOr<Result<Word8, DecodeError>>(
-        Option.bind<Char, Result<Word8, DecodeError>>(next(), func (c1) {
-          Option.bind<Char, Result<Word8, DecodeError>>(next(), func (c2) {?
-            Result.bind<Word8, Word8, DecodeError>(decodeW4(c1), func (x1) {
-              Result.bind<Word8, Word8, DecodeError>(decodeW4(c2), func (x2) {
+      Option.get<Result<Word8, DecodeError>>(
+        Option.chain<Char, Result<Word8, DecodeError>>(next(), func (c1) {
+          Option.chain<Char, Result<Word8, DecodeError>>(next(), func (c2) {?
+            Result.chain<Word8, Word8, DecodeError>(decodeW4(c1), func (x1) {
+              Result.chain<Word8, Word8, DecodeError>(decodeW4(c2), func (x2) {
                 #ok (x1 * base + x2);
               });
             });
@@ -69,7 +69,7 @@ module {
       );
     };
     var i = 0;
-    let n = text.len() / 2 + text.len() % 2;
+    let n = text.size() / 2 + text.size() % 2;
     let array = Array.init<Word8>(n, 0);
     while (i != n) {
       switch (parse()) {
