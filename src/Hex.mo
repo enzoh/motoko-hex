@@ -60,7 +60,7 @@ module {
           Option.chain<Char, Result<Word8, DecodeError>>(next(), func (c2) {?
             Result.chain<Word8, Word8, DecodeError>(decodeW4(c1), func (x1) {
               Result.chain<Word8, Word8, DecodeError>(decodeW4(c2), func (x2) {
-                #ok (x1 * base + x2);
+                #ok (x1 *% base +% x2);
               });
             });
           });
