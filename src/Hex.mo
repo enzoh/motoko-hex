@@ -57,7 +57,7 @@ module {
     let next = text.chars().next;
     func parse() : Result<Nat8, DecodeError> {
       Option.get<Result<Nat8, DecodeError>>(
-        do ? { 
+        do ? {
           let c1 = next()!;
           let c2 = next()!;
           Result.chain<Nat8, Nat8, DecodeError>(decodeW4(c1), func (x1) {
