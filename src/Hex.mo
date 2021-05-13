@@ -57,15 +57,15 @@ module {
     let next = text.chars().next;
     func parse() : Result<Nat8, DecodeError> {
       Option.get<Result<Nat8, DecodeError>>(
-        Option.chain<Char, Result<Nat8, DecodeError>>(next(), func (c1) {
-          Option.chain<Char, Result<Nat8, DecodeError>>(next(), func (c2) {?
-            Result.chain<Nat8, Nat8, DecodeError>(decodeW4(c1), func (x1) {
-              Result.chain<Nat8, Nat8, DecodeError>(decodeW4(c2), func (x2) {
+        do ? { 
+          let c1 = next()!;
+          let c2 = next()!;
+          Result.chain<Nat8, Nat8, DecodeError>(decodeW4(c1), func (x1) {
+            Result.chain<Nat8, Nat8, DecodeError>(decodeW4(c2), func (x2) {
                 #ok (x1 * base + x2);
-              });
-            });
-          });
-        }),
+            })
+          })
+        },
         #err (#msg "Not enough input!"),
       );
     };
